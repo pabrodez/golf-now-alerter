@@ -1,0 +1,27 @@
+{
+  "name": "golf-now-alerter",
+  "version": "1.0.0",
+  "description": "Get alerts of GolfNow tee times on Telegram",
+  "main": "./dist/index.js",
+  "private": true,
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "start": "node ./dist/index.js"
+  },
+  "engines": {
+    "node": ">=14.00.0"
+  },
+  "author": "@pabrodez",
+  "license": "ISC",
+  "dependencies": {
+    "@types/node-fetch": "^2.5.7",
+    "dotenv": "^8.2.0",
+    "node-fetch": "^2.6.1",
+    "telegraf": "^3.38.0"
+  },
+  "devDependencies": {
+    "@types/puppeteer": "^5.4.2",
+    "date-fns": "^2.16.1",
+    "typescript": "^4.1.3"
+  }
+}

@@ -1,0 +1,13 @@
+{
+    "compilerOptions": {
+      "outDir": "dist",
+      "rootDir": "src",
+      "noImplicitAny": true,
+      "lib": ["esnext", "dom"],
+      "target": "ES2017",
+      "module": "CommonJS",
+      "moduleResolution": "node",
+    },
+    "include": ["src"],
+    "exclude": ["node_modules", "dist"]
+  }
