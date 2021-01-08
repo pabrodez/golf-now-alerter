@@ -25,7 +25,9 @@ vars = {
     minuteDay: 0,  // minute of the day to start processing the alert
     daysOut: 14,  // how many days from now
     preferredDaysWeek: [6, 0], // 0 = sunday, 1 = monday, etc
-    golfNowUrl: 'https://www.golfnow.co.uk',
+    priceRange: [0, 25],
+    hourRange: [10, 16],  // between what hours of the day (24 hr clock)
+    filters: ((tt: TeeTime) => boolean)[], // array of functions that take a TeeTime and return true/false used to filter fetched teetimes (check the examples in vdata.ts file)
     courseIds: ['12090']  // ids of the courses yo want the info from. This is found in the URL of the golf course at GolfNow website
 }
 ```
@@ -36,6 +38,6 @@ npm run-script start
 ```
 
 ## TODO:
-- [ ] Store previously fetched tee times, so the new tee times can be compared and filtered (flag with "it's new", "price lowered", etc.)
-- [ ] Add option to specify a range for prices and times
-- [ ] Pretty inline leyboard navegation
+- [ ] Add commands to stop getting alerts and to resume getting them
+- [X] Store previously fetched tee times, so the new tee times can be compared and filtered (flag with "it's new", "price lowered", etc.)
+- [X] Add option to specify a range for prices and times

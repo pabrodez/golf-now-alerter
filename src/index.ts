@@ -1,37 +1,52 @@
-import { fetcher } from "./node-fetcher"
+import { watcher } from "./service/watcher"
 import { Telegraf } from "telegraf"
-import { TeeTime, formatDataToSend } from "./helpers"
+import {
+    filterNewTTimes,
+    millisecToStartDateTime,
+    TeeTime
+} from "./utils/helpers"
 import { vars } from './data'
-import { addDays, differenceInMilliseconds, setHours, setMinutes } from "date-fns"
+import { sendNewTeeTimes } from "./handlers/refresh"
 require('dotenv').config()
 
 
-async function doYourThing() {
+async function main() {
+    // last is last batch of teetimes fetched and new is tee times
+    // found in this last fetch but not found in the previous fetch tee times
+    let teeTimesObj: { last: TeeTime[], new: TeeTime[] } = { last: [], new: [] }
+    // move the logic of filtering new teetimes to the proxy
+    let teeTimesProxy = ((ttObj: { last: TeeTime[], new: TeeTime[] }) => {
+        const handler = {
+            set(obj: typeof ttObj, prop: keyof typeof ttObj, value: TeeTime[]) {
+                if (prop === 'last') {
+                    obj['new'] = filterNewTTimes(obj['last'], value)
+                }
+                obj[prop] = value;
+                return true;
+            }
+        }
+        return new Proxy(ttObj, handler)
+    })(teeTimesObj);
+
     const bot = new Telegraf(process.env.BOT_TOKEN)
     bot.catch((err: Error) => {
         bot.telegram.sendMessage(process.env.CHAT_ID, 'Error')
         console.error('Error: ', err.message, '\nMaybe check bot token')
     })
+    bot.command('refresh', async (ctx) => {
+        await sendNewTeeTimes(ctx, teeTimesProxy)
+    })
+
     bot.launch()
 
-    try {
-        const teeTimes: TeeTime[] = await fetcher()
-        const processed = formatDataToSend(teeTimes) || 'Not tee times found'
-        await bot.telegram.sendMessage(process.env.CHAT_ID, processed, { parse_mode: 'MarkdownV2' })
-    } catch (error) {
-        await bot.telegram.sendMessage(process.env.CHAT_ID, 'An error occurred while processing request')
-        console.error(error)
-    }
+    watcher(bot, teeTimesProxy)
 
+    // setTimeout(async () => {
+    //     await watcher(bot, teeTimesProxy)
+        setInterval(async () => {
+            await watcher(bot, teeTimesProxy)
+        }, 1000 * 60 * 15) // 1000 * 60 * 60 * 24 * Number(vars.days)
+    // }, millisecToStartDateTime())
 }
 
-// figure out when to start 
-const now = new Date()
-const newDate = setMinutes(setHours(now, vars.hourDay), vars.minuteDay)
-const difference = differenceInMilliseconds(newDate, now)
-const milisecsToStart = difference < 0 ? differenceInMilliseconds(addDays(newDate, 1), now) : difference;
-
-setTimeout(() => {
-    doYourThing()
-    setInterval(doYourThing, 1000 * 60 * 60 * 24 * Number(vars.days))
-}, milisecsToStart)
+main()
