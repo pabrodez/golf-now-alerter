@@ -27,7 +27,7 @@ vars = {
     preferredDaysWeek: [6, 0], // 0 = sunday, 1 = monday, etc
     priceRange: [0, 25],
     hourRange: [10, 16],  // between what hours of the day (24 hr clock)
-    filters: ((tt: TeeTime) => boolean)[], // array of functions that take a TeeTime and return true/false used to filter fetched teetimes (check the examples in vdata.ts file)
+    filters: ((tt: TeeTime) => boolean)[], // array of functions that take a TeeTime and return true/false used to filter fetched teetimes (check the examples in data.ts file)
     courseIds: ['12090']  // ids of the courses yo want the info from. This is found in the URL of the golf course at GolfNow website
 }
 ```

@@ -30,7 +30,7 @@ export async function gatherTeeTimes(): Promise<TeeTime[]> {
             gathered.push(...ttime)
         }
         // space out requests
-        // setTimeout(() => { }, 1000 * 60 * 3)
+        setTimeout(() => { }, 1000 * 60 * 3)
     }
     return gathered
 }

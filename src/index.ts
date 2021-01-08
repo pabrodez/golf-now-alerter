@@ -41,12 +41,12 @@ async function main() {
 
     watcher(bot, teeTimesProxy)
 
-    // setTimeout(async () => {
-    //     await watcher(bot, teeTimesProxy)
+    setTimeout(async () => {
+        await watcher(bot, teeTimesProxy)
         setInterval(async () => {
             await watcher(bot, teeTimesProxy)
-        }, 1000 * 60 * 15) // 1000 * 60 * 60 * 24 * Number(vars.days)
-    // }, millisecToStartDateTime())
+        }, 1000 * 60 * 60 * 24 * Number(vars.days))
+    }, millisecToStartDateTime())
 }
 
 main()
