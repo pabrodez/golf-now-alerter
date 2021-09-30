@@ -31,6 +31,6 @@ export const vars: Vars = {
             return rate > Math.min(...vars.priceRange) && rate < Math.max(...vars.priceRange)
         }
     ],
-    golfNowUrl: 'https://www.golfnow.co.uk',
-    courseIds: ['12090', '13619']
+    golfNowUrl: 'https://www.golfnow.com',
+    courseIds: ['16330', '12531']
 }
